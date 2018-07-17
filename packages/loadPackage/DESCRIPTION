@@ -1,4 +1,4 @@
-Package: load_package
+Package: loadPackage
 Type: Package
 Title: Load R Packages
 Version: 0.1.0
