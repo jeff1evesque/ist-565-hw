@@ -1,0 +1,10 @@
+Package: load_package
+Type: Package
+Title: Load R Packages
+Version: 0.1.0
+Author: Jeffrey Levesque
+Maintainer: Jeffrey Levesque <jeff1evesque@yahoo.com>
+Description: General package to install, and load any number of packages.
+License: BSD
+LazyData: TRUE
+RoxygenNote: 5.0.1
