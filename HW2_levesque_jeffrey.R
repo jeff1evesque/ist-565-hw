@@ -27,5 +27,9 @@ if (nzchar(Sys.getenv('RSTUDIO_USER_IDENTITY'))) {
 ## import dataset
 df = read.csv('data-storyteller.csv')
 
+## load custom package
+devtools::install_local(paste(cwd, sep='', '/packages/load_package'))
+library('load_package')
+
 ## remove column if all 0s
 df = df[, colSums(df != 0) > 0]
