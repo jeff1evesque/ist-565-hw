@@ -25,4 +25,7 @@ if (nzchar(Sys.getenv('RSTUDIO_USER_IDENTITY'))) {
 }
 
 ## import dataset
-data = read.csv('data-storyteller.csv')
+df = read.csv('data-storyteller.csv')
+
+## remove column if all 0s
+df = df[, colSums(df != 0) > 0]
