@@ -20,16 +20,16 @@
 
 ## set project cwd: only execute in RStudio
 if (nzchar(Sys.getenv('RSTUDIO_USER_IDENTITY'))) {
-  cwd <- dirname(rstudioapi::getSourceEditorContext()$path)
+  cwd = dirname(dirname(rstudioapi::getSourceEditorContext()$path))
   setwd(cwd)
 }
 
 ## import dataset
-df = read.csv('data-storyteller.csv')
+df = read.csv('data/data-storyteller.csv')
 
 ## load custom package
-devtools::install_local(paste(cwd, sep='', '/packages/load_package'))
-library('load_package')
+devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
+library('loadPackage')
 
 ## remove column if all 0s
 df = df[, colSums(df != 0) > 0]
