@@ -24,6 +24,9 @@ if (nzchar(Sys.getenv('RSTUDIO_USER_IDENTITY'))) {
   setwd(cwd)
 }
 
+## create ignored directories
+dir.create(file.path(cwd, 'hw2/visualization'), showWarnings = FALSE)
+
 ## import dataset
 df = read.csv('data/data-storyteller.csv')
 
@@ -31,5 +34,27 @@ df = read.csv('data/data-storyteller.csv')
 devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
+## load contrib packages
+load_package(c('plyr', 'ggplot2', 'reshape2'))
+
 ## remove column if all 0s
 df = df[, colSums(df != 0) > 0]
+
+## sum rows on first column
+aggregate = ddply(df, 'School', numcolwise(sum))
+aggregate.m = melt(aggregate[-c(2)], id='School')
+
+## generate stacked bargraphs
+stacked_bar <- ggplot(aggregate.m) +
+  geom_bar(stat = 'summary', fun.y = 'mean', color='black', aes(x=variable, y=value, fill=School)) +
+  labs(x = 'Lesson State', y = 'Aggregate Sum', title = 'Aggregate Sum vs Lesson State', fill = 'School') +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_hue(l=30)
+
+## save visualization
+ggsave(
+  'hw2/visualization/stacked_bar.png',
+  width = 16,
+  height = 9,
+  dpi = 100
+)
