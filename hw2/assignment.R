@@ -40,13 +40,22 @@ load_package(c('plyr', 'ggplot2', 'reshape2'))
 ## remove column if all 0s
 df = df[, colSums(df != 0) > 0]
 
+## remove section column
+df = df[, -c(which(colnames(df)=='Section'))]
+
 ## sum rows on first column
 aggregate = ddply(df, 'School', numcolwise(sum))
-aggregate.m = melt(aggregate[-c(2)], id='School')
+
+## cell ratio: each dataframe cell value is divided by the row sum
+aggregate.avg = aggregate[,2:length(aggregate)] / rowSums(aggregate[,2:length(aggregate)])
+aggregate.avg$School = aggregate$School
+
+## melt dataset to long format
+aggregate.m = melt(aggregate.avg, id='School')
 
 ## generate stacked bargraphs
 stacked_bar <- ggplot(aggregate.m) +
-  geom_bar(stat = 'summary', fun.y = 'sum', color='black', aes(x=variable, y=value, fill=School)) +
+  geom_bar(stat = 'summary', fun.y = 'mean', color='black', aes(x=variable, y=value, fill=School)) +
   labs(x = 'Lesson State', y = 'Aggregate Sum', title = 'Aggregate Sum vs Lesson State', fill = 'School') +
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_fill_hue(l=30)
@@ -61,11 +70,13 @@ ggsave(
 
 ## generate segregated bargraphs
 line_graphs <- ggplot(aggregate.m) +
-  geom_bar(stat = 'summary', fun.y = 'sum', color='black', aes(x=variable, y=value, fill=School)) +
+  geom_bar(stat = 'summary', fun.y = 'mean', color='black', aes(x=variable, y=value, fill=School)) +
   facet_wrap(~School) +
   labs(x = 'Lesson State', y = 'Aggregate Sum', title = 'Aggregate Sum vs Lesson State', fill = 'School') +
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_fill_hue(l=30)
+
+head(within(aggregate.m, Mean<- ave(value, School, variable)))
 
 ## save visualization
 ggsave(
