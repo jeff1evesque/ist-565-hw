@@ -50,6 +50,7 @@ aggregate = ddply(df, 'School', numcolwise(sum))
 aggregate.avg = aggregate[,2:length(aggregate)] / rowSums(aggregate[,2:length(aggregate)])
 aggregate.avg$School = aggregate$School
 
+## melt dataset to long format
 aggregate.m = melt(aggregate.avg, id='School')
 
 ## generate stacked bargraphs
