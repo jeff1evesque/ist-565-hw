@@ -56,7 +56,7 @@ aggregate.m = melt(aggregate.avg, id='School')
 ## generate stacked bargraphs
 stacked_bar <- ggplot(aggregate.m) +
   geom_bar(stat = 'summary', fun.y = 'mean', color='black', aes(x=variable, y=value, fill=School)) +
-  labs(x = 'Lesson State', y = 'Aggregate Sum', title = 'Aggregate Sum vs Lesson State', fill = 'School') +
+  labs(x = 'Lesson State', y = 'Aggregate Mean', title = 'Aggregate Mean vs Lesson State', fill = 'School') +
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_fill_hue(l=30)
 
@@ -72,7 +72,7 @@ ggsave(
 line_graphs <- ggplot(aggregate.m) +
   geom_bar(stat = 'summary', fun.y = 'mean', color='black', aes(x=variable, y=value, fill=School)) +
   facet_wrap(~School) +
-  labs(x = 'Lesson State', y = 'Aggregate Sum', title = 'Aggregate Sum vs Lesson State', fill = 'School') +
+  labs(x = 'Lesson State', y = 'Aggregate Mean', title = 'Aggregate Mean vs Lesson State', fill = 'School') +
   theme(plot.title = element_text(hjust = 0.5)) +
   scale_fill_hue(l=30)
 
