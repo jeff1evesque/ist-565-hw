@@ -1,0 +1,67 @@
+=== Run information ===
+
+Scheme:       weka.associations.Apriori -N 25 -T 0 -C 0.8 -D 0.05 -U 1.0 -M 0.1 -S -1.0 -c -1
+Relation:     bankdata_csv_all-weka.filters.unsupervised.attribute.Remove-R1-weka.filters.unsupervised.attribute.Discretize-B10-M-1.0-Rfirst-last-precision6
+Instances:    600
+Attributes:   11
+              age
+              sex
+              region
+              income
+              married
+              children
+              car
+              save_act
+              current_act
+              mortgage
+              pep
+=== Associator model (full training set) ===
+
+
+Apriori
+=======
+
+Minimum support: 0.1 (60 instances)
+Minimum metric <confidence>: 0.8
+Number of cycles performed: 18
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 33
+
+Size of set of large itemsets L(2): 161
+
+Size of set of large itemsets L(3): 286
+
+Size of set of large itemsets L(4): 171
+
+Size of set of large itemsets L(5): 26
+
+Best rules found:
+
+ 1. children='(-inf-0.3]' save_act=YES mortgage=NO pep=NO 74 ==> married=YES 73    <conf:(0.99)> lift:(1.49) lev:(0.04) [24] conv:(12.58)
+ 2. sex=FEMALE children='(-inf-0.3]' mortgage=NO pep=NO 64 ==> married=YES 63    <conf:(0.98)> lift:(1.49) lev:(0.03) [20] conv:(10.88)
+ 3. children='(-inf-0.3]' current_act=YES mortgage=NO pep=NO 82 ==> married=YES 80    <conf:(0.98)> lift:(1.48) lev:(0.04) [25] conv:(9.29)
+ 4. children='(-inf-0.3]' mortgage=NO pep=NO 107 ==> married=YES 104    <conf:(0.97)> lift:(1.47) lev:(0.06) [33] conv:(9.1)
+ 5. children='(-inf-0.3]' car=NO mortgage=NO pep=NO 62 ==> married=YES 60    <conf:(0.97)> lift:(1.47) lev:(0.03) [19] conv:(7.03)
+ 6. married=YES children='(-inf-0.3]' save_act=YES current_act=YES 87 ==> pep=NO 80    <conf:(0.92)> lift:(1.69) lev:(0.05) [32] conv:(4.97)
+ 7. married=YES children='(-inf-0.3]' save_act=YES mortgage=NO 80 ==> pep=NO 73    <conf:(0.91)> lift:(1.68) lev:(0.05) [29] conv:(4.57)
+ 8. married=YES children='(-inf-0.3]' current_act=YES mortgage=NO 88 ==> pep=NO 80    <conf:(0.91)> lift:(1.67) lev:(0.05) [32] conv:(4.47)
+ 9. sex=FEMALE married=YES children='(-inf-0.3]' mortgage=NO 70 ==> pep=NO 63    <conf:(0.9)> lift:(1.66) lev:(0.04) [24] conv:(4)
+10. married=YES children='(-inf-0.3]' save_act=YES 119 ==> pep=NO 107    <conf:(0.9)> lift:(1.65) lev:(0.07) [42] conv:(4.18)
+11. age='(62.1-inf)' 68 ==> save_act=YES 61    <conf:(0.9)> lift:(1.3) lev:(0.02) [14] conv:(2.63)
+12. married=YES children='(-inf-0.3]' mortgage=NO 116 ==> pep=NO 104    <conf:(0.9)> lift:(1.65) lev:(0.07) [40] conv:(4.07)
+13. married=YES children='(-inf-0.3]' car=NO mortgage=NO 67 ==> pep=NO 60    <conf:(0.9)> lift:(1.65) lev:(0.04) [23] conv:(3.82)
+14. children='(-inf-0.3]' car=NO pep=NO 91 ==> married=YES 80    <conf:(0.88)> lift:(1.33) lev:(0.03) [19] conv:(2.58)
+15. region=INNER_CITY children='(-inf-0.3]' pep=NO 73 ==> married=YES 64    <conf:(0.88)> lift:(1.33) lev:(0.03) [15] conv:(2.48)
+16. children='(-inf-0.3]' car=NO current_act=YES pep=NO 69 ==> married=YES 60    <conf:(0.87)> lift:(1.32) lev:(0.02) [14] conv:(2.35)
+17. sex=FEMALE children='(-inf-0.3]' pep=NO 90 ==> married=YES 78    <conf:(0.87)> lift:(1.31) lev:(0.03) [18] conv:(2.35)
+18. car=NO mortgage=NO pep=YES 89 ==> current_act=YES 77    <conf:(0.87)> lift:(1.14) lev:(0.02) [9] conv:(1.65)
+19. children='(0.9-1.2]' save_act=YES current_act=YES 73 ==> pep=YES 63    <conf:(0.86)> lift:(1.89) lev:(0.05) [29] conv:(3.61)
+20. sex=FEMALE children='(-inf-0.3]' current_act=YES pep=NO 70 ==> married=YES 60    <conf:(0.86)> lift:(1.3) lev:(0.02) [13] conv:(2.16)
+21. car=YES save_act=YES mortgage=NO pep=NO 74 ==> married=YES 63    <conf:(0.85)> lift:(1.29) lev:(0.02) [14] conv:(2.1)
+22. region=INNER_CITY current_act=YES mortgage=NO pep=NO 78 ==> married=YES 66    <conf:(0.85)> lift:(1.28) lev:(0.02) [14] conv:(2.04)
+23. children='(0.9-1.2]' mortgage=NO 84 ==> pep=YES 71    <conf:(0.85)> lift:(1.85) lev:(0.05) [32] conv:(3.26)
+24. save_act=YES mortgage=NO pep=NO 142 ==> married=YES 120    <conf:(0.85)> lift:(1.28) lev:(0.04) [26] conv:(2.1)
+25. sex=FEMALE married=YES children='(-inf-0.3]' current_act=YES 71 ==> pep=NO 60    <conf:(0.85)> lift:(1.56) lev:(0.04) [21] conv:(2.7)
+
