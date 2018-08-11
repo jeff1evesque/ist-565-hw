@@ -1,5 +1,5 @@
 ##
-## HW2_levesque_jeffrey.R
+## assignment.R
 ##
 ##     Each of 5 schools (A, B, C, D and E) is implementing the same math
 ##     course this semester, with 35 lessons. There are 30 sections total.
@@ -27,15 +27,15 @@ if (nzchar(Sys.getenv('RSTUDIO_USER_IDENTITY'))) {
 ## create ignored directories
 dir.create(file.path(cwd, 'hw2/visualization'), showWarnings = FALSE)
 
-## import dataset
-df = read.csv('data/data-storyteller.csv')
-
 ## load custom package
 devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
 load_package(c('plyr', 'ggplot2', 'reshape2'))
+
+## import dataset
+df = read.csv('data/data-storyteller.csv')
 
 ## remove column if all 0s
 df = df[, colSums(df != 0) > 0]
