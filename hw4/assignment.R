@@ -31,3 +31,6 @@ library('loadPackage')
 
 ## load contrib packages
 load_package(c('plyr', 'ggplot2', 'reshape2'))
+
+## import dataset
+df = read.csv('data/fedPapers/fedPapers85.csv')
