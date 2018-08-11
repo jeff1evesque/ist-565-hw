@@ -23,7 +23,7 @@ if (nzchar(Sys.getenv('RSTUDIO_USER_IDENTITY'))) {
 }
 
 ## create ignored directories
-dir.create(file.path(cwd, 'hw2/visualization'), showWarnings = FALSE)
+dir.create(file.path(cwd, 'hw4/visualization'), showWarnings = FALSE)
 
 ## load custom package
 devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
@@ -31,6 +31,3 @@ library('loadPackage')
 
 ## load contrib packages
 load_package(c('plyr', 'ggplot2', 'reshape2'))
-
-## import dataset
-df = read.csv('data/data-storyteller.csv')
