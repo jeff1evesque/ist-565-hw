@@ -52,14 +52,25 @@ df = df[, -c(2)]
 ##
 kCluster = kmeans(df[,-c(1:2)], 4, nstart=20)
 
-##
 ## cross tabulation: author and cluster membership
-##
-## @randIndex, measure between two partitions varying from -1 to 1.
-##
 kClusterTable = table(df$author, kcluster$cluster)
+
+## visualize cross tabulation
+png('hw4/visualization/mosaic_plot.png')
 mosaicplot(kClusterTable, xlab='Author', ylab='Cluster')
+dev.off()
+
+## measure between two partitions varying from -1 to 1.
+sink('hw4/visualization/kmeans_analysis.txt')
+kCluster
+cat('\n\n')
+cat('===========================================================\n')
+cat(' randIndex: measure between author, and cluster partitions.\n')
+cat('\n')
+cat(' Note: values vary between -1 to 1\n')
+cat('===========================================================\n')
 randIndex(kClusterTable)
+sink()
 
 ## visualize kmeans
 fviz_cluster(
@@ -69,4 +80,11 @@ fviz_cluster(
     star.plot = TRUE, # Add segments from centroids to items
     repel = TRUE, # Avoid label overplotting (slow)
     ggtheme = theme_minimal()
+)
+
+ggsave(
+  'hw4/visualization/kmeans_cluster.png',
+  width = 16,
+  height = 9,
+  dpi = 100
 )
