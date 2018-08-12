@@ -61,7 +61,7 @@ mosaicplot(kClusterTable, xlab='Author', ylab='Cluster')
 dev.off()
 
 ## measure between two partitions varying from -1 to 1.
-sink('hw4/visualization/analysis-output.txt')
+sink('hw4/visualization/kmeans_analysis.txt')
 kCluster
 cat('\n\n')
 cat('===========================================================\n')
