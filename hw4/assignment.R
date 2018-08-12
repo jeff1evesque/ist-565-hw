@@ -35,7 +35,12 @@ load_package(c('stats', 'flexclust'))
 ## import dataset
 df = read.csv('data/fedPapers/fedPapers85.csv')
 
-## convert author to numeric
+##
+## preprocess data:
+##
+## - convert author to numeric
+## - remove filename
+##
 df[, 1] = as.numeric(df[, 1])
 df = df[, -c(2)]
 
