@@ -30,7 +30,17 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('plyr', 'ggplot2', 'reshape2'))
+load_package(c('stats'))
 
 ## import dataset
 df = read.csv('data/fedPapers/fedPapers85.csv')
+
+## convert author to numeric
+df[, 1] = as.numeric(df[, 1])
+
+##
+## kmeans clustering
+##
+## @nstart=xx, select best of xx random initial configurations
+##
+kcluster = kmeans(df[,-c(2)], 3, nstart=20)
