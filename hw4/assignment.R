@@ -27,21 +27,46 @@ dir.create(file.path(cwd, 'hw4/visualization'), showWarnings = FALSE)
 
 ## load custom package
 devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
-library('loadPackage')
+library('loadPackage', 'factoextra')
 
 ## load contrib packages
-load_package(c('stats'))
+load_package(c('stats', 'flexclust'))
 
 ## import dataset
 df = read.csv('data/fedPapers/fedPapers85.csv')
 
-## convert author to numeric
+##
+## preprocess data:
+##
+## - convert author to numeric
+## - remove filename
+##
 df[, 1] = as.numeric(df[, 1])
+df = df[, -c(2)]
 
 ##
-## kmeans clustering
+## kmeans clustering: four clusters implemented, since there were three different
+##     authors, and two (hamilton + madison) coauthored.
 ##
 ## @nstart=xx, select best of xx random initial configurations
 ##
-kcluster = kmeans(df[,-c(1:2)], 3, nstart=20)
+kCluster = kmeans(df[,-c(1:2)], 4, nstart=20)
 
+##
+## cross tabulation: author and cluster membership
+##
+## @randIndex, measure between two partitions varying from -1 to 1.
+##
+kClusterTable = table(df$author, kcluster$cluster)
+mosaicplot(kClusterTable, xlab='Author', ylab='Cluster')
+randIndex(kClusterTable)
+
+## visualize kmeans
+fviz_cluster(
+    kCluster,
+    data = df,
+    ellipse.type = 'euclid', # Concentration ellipse
+    star.plot = TRUE, # Add segments from centroids to items
+    repel = TRUE, # Avoid label overplotting (slow)
+    ggtheme = theme_minimal()
+)
