@@ -43,4 +43,5 @@ df[, 1] = as.numeric(df[, 1])
 ##
 ## @nstart=xx, select best of xx random initial configurations
 ##
-kcluster = kmeans(df[,-c(2)], 3, nstart=20)
+kcluster = kmeans(df[,-c(1:2)], 3, nstart=20)
+
