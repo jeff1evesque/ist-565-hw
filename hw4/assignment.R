@@ -45,11 +45,12 @@ df[, 1] = as.numeric(df[, 1])
 df = df[, -c(2)]
 
 ##
-## kmeans clustering
+## kmeans clustering: four clusters implemented, since there were three different
+##     authors, and two (hamilton + madison) coauthored.
 ##
 ## @nstart=xx, select best of xx random initial configurations
 ##
-kCluster = kmeans(df[,-c(1:2)], 3, nstart=20)
+kCluster = kmeans(df[,-c(1:2)], 4, nstart=20)
 
 ##
 ## cross tabulation: author and cluster membership
@@ -57,7 +58,7 @@ kCluster = kmeans(df[,-c(1:2)], 3, nstart=20)
 ## @randIndex, measure between two partitions varying from -1 to 1.
 ##
 kClusterTable = table(df$author, kcluster$cluster)
-mosaicplot(kClusterTable, xlab='AUthor', ylab='Cluster')
+mosaicplot(kClusterTable, xlab='Author', ylab='Cluster')
 randIndex(kClusterTable)
 
 ## visualize kmeans
