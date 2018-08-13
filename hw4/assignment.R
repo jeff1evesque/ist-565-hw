@@ -30,7 +30,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage', 'factoextra')
 
 ## load contrib packages
-load_package(c('stats', 'flexclust'))
+load_package(c('stats', 'flexclust', 'mclust'))
 
 ## import dataset
 df = read.csv('data/fedPapers/fedPapers85.csv')
@@ -50,19 +50,19 @@ df = df[, -c(2)]
 ##
 ## @nstart=xx, select best of xx random initial configurations
 ##
-kCluster = kmeans(df[,-c(1:2)], 4, nstart=20)
+KMeansCluster = kmeans(df, 4, nstart=20)
 
 ## cross tabulation: author and cluster membership
-kClusterTable = table(df$author, kcluster$cluster)
+kClusterTable = table(df$author, KMeansCluster$cluster)
 
 ## visualize cross tabulation
-png('hw4/visualization/mosaic_plot.png')
+png('hw4/visualization/mosaic_kmeans.png')
 mosaicplot(kClusterTable, xlab='Author', ylab='Cluster')
 dev.off()
 
-## measure between two partitions varying from -1 to 1.
+## kmeans summary
 sink('hw4/visualization/kmeans_analysis.txt')
-kCluster
+KMeansCluster
 cat('\n\n')
 cat('===========================================================\n')
 cat(' randIndex: measure between author, and cluster partitions.\n')
@@ -74,7 +74,7 @@ sink()
 
 ## visualize kmeans
 fviz_cluster(
-    kCluster,
+    KMeansCluster,
     data = df,
     ellipse.type = 'euclid', # Concentration ellipse
     star.plot = TRUE, # Add segments from centroids to items
@@ -88,3 +88,38 @@ ggsave(
   height = 9,
   dpi = 100
 )
+
+## expectation maximization (em) clustering
+author = factor(df$author, levels = 1:4, labels = c('hamilton', 'hm', 'jay', 'madison'))
+X = data.matrix(df)
+EMCluster <- Mclust(X)
+
+## cross tabulation: author and cluster membership
+EMTable = table(df$author, EMCluster$classification)
+
+## visualize cross tabulation
+png('hw4/visualization/mosaic_kmeans.png')
+mosaicplot(EMTable, xlab='Author', ylab='Cluster')
+dev.off()
+
+## expectation maximization summary
+sink('hw4/visualization/em_analysis.txt')
+summary(EMCluster)
+cat('\n\n')
+cat('===========================================================\n')
+cat(' randIndex: measure between author, and cluster partitions.\n')
+cat('\n')
+cat(' Note: values vary between -1 to 1\n')
+cat('===========================================================\n')
+adjustedRandIndex(author, EMCluster$classification)
+sink()
+
+## visualize cross tabulation
+png('hw4/visualization/mosaic_em.png')
+mosaicplot(EMTable, xlab='Author', ylab='Cluster')
+dev.off()
+
+## visualize expectation maximization
+png('hw4/visualization/em_cluster.png')
+plot(MclustDR(EMCluster, lambda = 1), what = 'scatterplot')
+dev.off()
