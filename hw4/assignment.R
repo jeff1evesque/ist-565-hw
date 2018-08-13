@@ -30,7 +30,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage', 'factoextra')
 
 ## load contrib packages
-load_package(c('stats', 'flexclust', 'mclust'))
+load_package(c('stats', 'flexclust', 'mclust', 'ggplot2'))
 
 ## import dataset
 df = read.csv('data/fedPapers/fedPapers85.csv')
@@ -56,9 +56,17 @@ KMeansCluster = kmeans(df, 4, nstart=20)
 kClusterTable = table(df$author, KMeansCluster$cluster)
 
 ## visualize cross tabulation
-png('hw4/visualization/mosaic_kmeans.png')
-mosaicplot(kClusterTable, xlab='Author', ylab='Cluster')
-dev.off()
+melted_kmeans <- melt(kClusterTable)
+ggplot(data = melted_kmeans, aes(x=Var.1, y=Var.2, fill=value)) +
+  geom_tile() +
+  labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
+
+ggsave(
+  'hw4/visualization/kmeans_em.png',
+  width = 16,
+  height = 9,
+  dpi = 100
+)
 
 ## kmeans summary
 sink('hw4/visualization/kmeans_analysis.txt')
@@ -98,9 +106,17 @@ EMCluster <- Mclust(X)
 EMTable = table(df$author, EMCluster$classification)
 
 ## visualize cross tabulation
-png('hw4/visualization/mosaic_kmeans.png')
-mosaicplot(EMTable, xlab='Author', ylab='Cluster')
-dev.off()
+melted_em <- melt(EMTable)
+ggplot(data = melted_em, aes(x=Var.1, y=Var.2, fill=value)) +
+  geom_tile() +
+  labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
+
+ggsave(
+  'hw4/visualization/crosstab_em.png',
+  width = 16,
+  height = 9,
+  dpi = 100
+)
 
 ## expectation maximization summary
 sink('hw4/visualization/em_analysis.txt')
@@ -114,11 +130,6 @@ cat('===========================================================\n')
 adjustedRandIndex(author, EMCluster$classification)
 sink()
 
-## visualize cross tabulation
-png('hw4/visualization/mosaic_em.png')
-mosaicplot(EMTable, xlab='Author', ylab='Cluster')
-dev.off()
-
 ## visualize expectation maximization
 png('hw4/visualization/em_cluster.png')
 plot(MclustDR(EMCluster, lambda = 1), what = 'scatterplot')
@@ -127,7 +138,7 @@ dev.off()
 ## hierarchical clustering
 HCluster = hclust(dist(df))
 clusterCut = cutree(HCluster, 4)
-HClustTable = table(clusterCut, df$author)
+HClusterTable = table(clusterCut, df$author)
 
 ## hierarchical clustering summary
 sink('hw4/visualization/hr_analysis.txt')
@@ -140,6 +151,14 @@ plot(HCluster)
 dev.off()
 
 ## visualize cross tabulation
-png('hw4/visualization/mosaic_hclust.png')
-mosaicplot(HClustTable, xlab='Author', ylab='Cluster')
-dev.off()
+melted_hclust <- melt(HClustTable)
+ggplot(data = melted_hclust, aes(x=clusterCut, y=Var.2, fill=value)) +
+    geom_tile() +
+    labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
+
+ggsave(
+    'hw4/visualization/crosstab_hclust.png',
+    width = 16,
+    height = 9,
+    dpi = 100
+)
