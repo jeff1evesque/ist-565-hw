@@ -123,3 +123,23 @@ dev.off()
 png('hw4/visualization/em_cluster.png')
 plot(MclustDR(EMCluster, lambda = 1), what = 'scatterplot')
 dev.off()
+
+## hierarchical clustering
+HCluster = hclust(dist(df))
+clusterCut = cutree(HCluster, 4)
+HClustTable = table(clusterCut, df$author)
+
+## hierarchical clustering summary
+sink('hw4/visualization/hr_analysis.txt')
+summary(HClusterTable)
+sink()
+
+## visualize hierarchical cluster
+png('hw4/visualization/hr_cluster.png')
+plot(HCluster)
+dev.off()
+
+## visualize cross tabulation
+png('hw4/visualization/mosaic_hclust.png')
+mosaicplot(HClustTable, xlab='Author', ylab='Cluster')
+dev.off()
