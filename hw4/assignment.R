@@ -1,20 +1,6 @@
 ##
 ## assignment.R
 ##
-##     In this homework you are provided with the Federalist Paper data set. The features
-##     are a set of "function words", for example, "upon". The feature value is the percentage
-##     of the word occurrence in an essay. For example, for the essay "Hamilton_fed_31.txt",
-##     if the function word "upon" appeared 3 times, and the total number of words in this
-##     essay is 1000, the feature value is 3/1000=0.3%. Now you are going to try solving this
-##     mystery using clustering algorithms k-Means, EM, and HAC. Document your analysis process
-##     and draw your conclusion on who wrote the disputed essays. Provide evidence for each
-##     method to demonstrate what patterns had been learned to predict the disputed papers, for
-##     example, visualize the clustering results and show where the disputed papers are located
-##     in relation to Hamilton and Madison's papers. By the way, where are the papers with joint
-##     authorship located? For k-Means and EM, analyze the centroids to explain which attributes
-##     are most useful for clustering. Hint: the centroid values on these dimensions should be
-##     far apart from each other to be able to distinguish the clusters.
-##
 
 ## set project cwd: only execute in RStudio
 if (nzchar(Sys.getenv('RSTUDIO_USER_IDENTITY'))) {
@@ -151,7 +137,7 @@ plot(HCluster)
 dev.off()
 
 ## visualize cross tabulation
-melted_hclust <- melt(HClustTable)
+melted_hclust <- melt(HClusterTable)
 ggplot(data = melted_hclust, aes(x=clusterCut, y=Var.2, fill=value)) +
     geom_tile() +
     labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
@@ -161,4 +147,128 @@ ggsave(
     width = 16,
     height = 9,
     dpi = 100
+)
+
+##
+## preprocess 2: remove 'hamilton-madison' articles
+##
+df2 = df[df$author != 3, ]
+
+##
+## kmeans clustering: four clusters implemented, since there were three different
+##     authors, and two (hamilton + madison) coauthored.
+##
+## @nstart=xx, select best of xx random initial configurations
+##
+KMeansCluster2 = kmeans(df2, 4, nstart=20)
+
+## cross tabulation: author and cluster membership
+kClusterTable2 = table(df2$author, KMeansCluster2$cluster)
+
+## visualize cross tabulation
+melted_kmeans2 <- melt(kClusterTable2)
+ggplot(data = melted_kmeans2, aes(x=Var.1, y=Var.2, fill=value)) +
+  geom_tile() +
+  labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
+
+ggsave(
+  'hw4/visualization/kmeans_em2.png',
+  width = 16,
+  height = 9,
+  dpi = 100
+)
+
+## kmeans summary
+sink('hw4/visualization/kmeans_analysis2.txt')
+KMeansCluster2
+cat('\n\n')
+cat('===========================================================\n')
+cat(' randIndex: measure between author, and cluster partitions.\n')
+cat('\n')
+cat(' Note: values vary between -1 to 1\n')
+cat('===========================================================\n')
+randIndex(kClusterTable2)
+sink()
+
+## visualize kmeans
+fviz_cluster(
+  KMeansCluster2,
+  data = df2,
+  ellipse.type = 'euclid', # Concentration ellipse
+  star.plot = TRUE, # Add segments from centroids to items
+  repel = TRUE, # Avoid label overplotting (slow)
+  ggtheme = theme_minimal()
+)
+
+ggsave(
+  'hw4/visualization/kmeans_cluster2.png',
+  width = 16,
+  height = 9,
+  dpi = 100
+)
+
+## expectation maximization (em) clustering
+author2 = factor(df2$author, levels = 1:3, labels = c('hamilton', 'jay', 'madison'))
+X2 = data.matrix(df2)
+EMCluster2 <- Mclust(X2)
+
+## cross tabulation: author and cluster membership
+EMTable2 = table(df2$author, EMCluster2$classification)
+
+## visualize cross tabulation
+melted_em2 <- melt(EMTable2)
+ggplot(data = melted_em2, aes(x=Var.1, y=Var.2, fill=value)) +
+  geom_tile() +
+  labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
+
+ggsave(
+  'hw4/visualization/crosstab_em2.png',
+  width = 16,
+  height = 9,
+  dpi = 100
+)
+
+## expectation maximization summary
+sink('hw4/visualization/em_analysis2.txt')
+summary(EMCluster2)
+cat('\n\n')
+cat('===========================================================\n')
+cat(' randIndex: measure between author, and cluster partitions.\n')
+cat('\n')
+cat(' Note: values vary between -1 to 1\n')
+cat('===========================================================\n')
+adjustedRandIndex(author2, EMCluster2$classification)
+sink()
+
+## visualize expectation maximization
+png('hw4/visualization/em_cluster2.png')
+plot(MclustDR(EMCluster2, lambda = 1), what = 'scatterplot')
+dev.off()
+
+## hierarchical clustering
+HCluster2 = hclust(dist(df2))
+clusterCut2 = cutree(HCluster2, 3)
+HClusterTable2 = table(clusterCut2, df2$author)
+
+## hierarchical clustering summary
+sink('hw4/visualization/hr_analysis2.txt')
+summary(HClusterTable2)
+sink()
+
+## visualize hierarchical cluster
+png('hw4/visualization/hr_cluster2.png')
+plot(HCluster2)
+dev.off()
+
+## visualize cross tabulation
+melted_hclust2 <- melt(HClusterTable2)
+ggplot(data = melted_hclust2, aes(x=clusterCut2, y=Var.2, fill=value)) +
+  geom_tile() +
+  labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
+
+ggsave(
+  'hw4/visualization/crosstab_hclust2.png',
+  width = 16,
+  height = 9,
+  dpi = 100
 )
