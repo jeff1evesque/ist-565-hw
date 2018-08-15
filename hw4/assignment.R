@@ -155,12 +155,11 @@ ggsave(
 df2 = df[df$author != 3, ]
 
 ##
-## kmeans clustering: four clusters implemented, since there were three different
-##     authors, and two (hamilton + madison) coauthored.
+## kmeans clustering: three clusters for each author.
 ##
 ## @nstart=xx, select best of xx random initial configurations
 ##
-KMeansCluster2 = kmeans(df2, 4, nstart=20)
+KMeansCluster2 = kmeans(df2, 3, nstart=20)
 
 ## cross tabulation: author and cluster membership
 kClusterTable2 = table(df2$author, KMeansCluster2$cluster)
