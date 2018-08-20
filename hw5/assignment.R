@@ -21,7 +21,7 @@ load_package(c('caret'))
 ## import dataset
 df = read.csv('data/fedPapers/fedPapers85.csv')
 
-## preprocess data: remove author, filename columns
+## preprocess data: remove author + filename columns
 df = df[, -c(1, 2)]
 
 ## train size
