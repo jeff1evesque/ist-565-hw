@@ -20,3 +20,6 @@ load_package(c(''))
 
 ## import dataset
 df = read.csv('data/fedPapers/fedPapers85.csv')
+
+## preprocess data
+df = df[, -c(1, 2)]
