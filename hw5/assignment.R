@@ -13,7 +13,7 @@ dir.create(file.path(cwd, 'hw5/visualization'), showWarnings = FALSE)
 
 ## load custom package
 devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
-library('loadPackage', 'factoextra')
+library('loadPackage')
 
 ## load contrib packages
 load_package(c(''))
