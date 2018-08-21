@@ -16,7 +16,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('stats', 'flexclust', 'mclust', 'ggplot2', 'factoextra'))
+load_package(c('stats', 'flexclust', 'mclust', 'ggplot2', 'reshape2'))
 
 ## import dataset
 df = read.csv('data/fedPapers/fedPapers85.csv')
@@ -43,7 +43,7 @@ kClusterTable = table(df$author, KMeansCluster$cluster)
 
 ## visualize cross tabulation
 melted_kmeans <- melt(kClusterTable)
-ggplot(data = melted_kmeans, aes(x=Var.1, y=Var.2, fill=value)) +
+ggplot(data = melted_kmeans, aes(x=Var1, y=Var2, fill=value)) +
   geom_tile() +
   labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
 
@@ -93,7 +93,7 @@ EMTable = table(df$author, EMCluster$classification)
 
 ## visualize cross tabulation
 melted_em <- melt(EMTable)
-ggplot(data = melted_em, aes(x=Var.1, y=Var.2, fill=value)) +
+ggplot(data = melted_em, aes(x=Var1, y=Var2, fill=value)) +
   geom_tile() +
   labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
 
@@ -138,7 +138,7 @@ dev.off()
 
 ## visualize cross tabulation
 melted_hclust <- melt(HClusterTable)
-ggplot(data = melted_hclust, aes(x=clusterCut, y=Var.2, fill=value)) +
+ggplot(data = melted_hclust, aes(x=clusterCut, y=Var2, fill=value)) +
     geom_tile() +
     labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
 
@@ -166,7 +166,7 @@ kClusterTable2 = table(df2$author, KMeansCluster2$cluster)
 
 ## visualize cross tabulation
 melted_kmeans2 <- melt(kClusterTable2)
-ggplot(data = melted_kmeans2, aes(x=Var.1, y=Var.2, fill=value)) +
+ggplot(data = melted_kmeans2, aes(x=Var1, y=Var2, fill=value)) +
   geom_tile() +
   labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
 
@@ -216,7 +216,7 @@ EMTable2 = table(df2$author, EMCluster2$classification)
 
 ## visualize cross tabulation
 melted_em2 <- melt(EMTable2)
-ggplot(data = melted_em2, aes(x=Var.1, y=Var.2, fill=value)) +
+ggplot(data = melted_em2, aes(x=Var1, y=Var2, fill=value)) +
   geom_tile() +
   labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
 
@@ -261,7 +261,7 @@ dev.off()
 
 ## visualize cross tabulation
 melted_hclust2 <- melt(HClusterTable2)
-ggplot(data = melted_hclust2, aes(x=clusterCut2, y=Var.2, fill=value)) +
+ggplot(data = melted_hclust2, aes(x=clusterCut2, y=Var2, fill=value)) +
   geom_tile() +
   labs(x = 'Cluster', y = 'Author', title = 'Author vs Cluster')
 
