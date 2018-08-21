@@ -31,7 +31,7 @@ train_size = floor((2/3) * nrow(df))
 set.seed(123)
 
 ## training keys
-train_keys = sample(seq_len(nrow(df)), size = train_size)
+train_keys = which(df$author != 'dispt')
 
 ## train + test set
 train = df[train_keys, ]
