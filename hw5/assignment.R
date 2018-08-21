@@ -22,7 +22,6 @@ load_package(c('caret', 'rpart', 'rpart.plot'))
 df = read.csv('data/fedPapers/fedPapers85.csv')
 
 ## preprocess data: remove author + filename columns
-#df[, 1] = as.numeric(df[, 1])
 df = df[, -c(2)]
 
 ## train size: 2/3 train + 1/3 test
