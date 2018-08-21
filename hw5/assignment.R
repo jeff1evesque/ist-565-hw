@@ -24,7 +24,7 @@ df = read.csv('data/fedPapers/fedPapers85.csv')
 ## preprocess data: remove author + filename columns
 df = df[, -c(1, 2)]
 
-## train size
+## train size: 2/3 train + 1/3 test
 train_size = floor((2/3) * nrow(df))
 
 ## random seed: allows reproducible random numbers
