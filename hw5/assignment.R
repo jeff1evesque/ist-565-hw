@@ -72,3 +72,42 @@ cat(' cross validation performance \n')
 cat('===========================================================\n')
 xpred.rpart(fit.default, xval=10)
 sink()
+
+##
+## tuned tree
+##
+## @minsplit, john jay only has 5 articles
+##
+fit.tuned = rpart(
+  author ~ .,
+  data = train,
+  control = list(minsplit = 5)
+)
+
+## visualize default tree
+png('hw5/visualization/tuned_tree.png')
+rpart.plot(fit.tuned)
+dev.off()
+
+## expectation maximization summary
+sink('hw5/visualization/tuned_tree_analysis.txt')
+cat('===========================================================\n')
+cat(' Note: the "root node error" is the error rate for a single\n')
+cat(' node tree, if the tree was pruned to node 1. It is useful\n')
+cat(' when comparing different decision tree models. measures of\n')
+cat(' predictive performance. \n')
+cat('===========================================================\n')
+printcp(fit.tuned)
+cat('\n\n')
+cat('===========================================================\n')
+cat(' resubstitution error rate, computed on training sample\n')
+cat(' predictive performance. \n')
+cat('===========================================================\n')
+fit.tuned.pred = table(predict(fit.tuned, type='class'), train$author)
+1-sum(diag(fit.tuned.pred))/sum(fit.tuned.pred)
+cat('\n\n')
+cat('===========================================================\n')
+cat(' cross validation performance \n')
+cat('===========================================================\n')
+xpred.rpart(fit.tuned, xval=10)
+sink()
