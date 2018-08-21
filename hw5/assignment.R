@@ -50,7 +50,7 @@ png('hw5/visualization/default_tree.png')
 rpart.plot(fit.default)
 dev.off()
 
-## expectation maximization summary
+## default tree summary
 sink('hw5/visualization/default_tree_analysis.txt')
 cat('===========================================================\n')
 cat(' Note: the "root node error" is the error rate for a single\n')
@@ -89,7 +89,7 @@ png('hw5/visualization/tuned_tree.png')
 rpart.plot(fit.tuned)
 dev.off()
 
-## expectation maximization summary
+## tuned tree summary
 sink('hw5/visualization/tuned_tree_analysis.txt')
 cat('===========================================================\n')
 cat(' Note: the "root node error" is the error rate for a single\n')
