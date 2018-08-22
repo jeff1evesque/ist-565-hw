@@ -24,25 +24,21 @@ df = read.csv('data/fedPapers/fedPapers85.csv')
 ## preprocess data: remove author + filename columns
 df = df[, -c(2)]
 
-## train size: 2/3 train + 1/3 test
-train_size = floor((2/3) * nrow(df))
-
-## random seed: allows reproducible random numbers
-set.seed(123)
-
 ## training keys
 train_keys = which(df$author != 'dispt')
+test_keys = which(df$author == 'dispt')
 
 ## train + test set
 train = df[train_keys, ]
-test = df[-train_keys, ]
+test = df[test_keys, ]
 
 ##
 ## default tree
 ##
 fit.default = rpart(
     author ~ .,
-    data = train
+    data = train,
+    method = 'class'
 )
 
 ## visualize default tree
@@ -68,25 +64,28 @@ fit.default.pred = table(predict(fit.default, type='class'), train$author)
 1-sum(diag(fit.default.pred))/sum(fit.default.pred)
 cat('\n\n')
 cat('===========================================================\n')
-cat(' cross validation performance \n')
-cat('===========================================================\n')
-xpred.rpart(fit.default, xval=10)
-cat('\n\n')
-cat('===========================================================\n')
-cat(' test prediction \n')
+cat(' test prediction (probability) \n')
 cat('===========================================================\n')
 predict(fit.default, test, type = 'prob')
+cat('\n\n')
+cat('===========================================================\n')
+cat(' test prediction (class) \n')
+cat('===========================================================\n')
+predict(fit.default, test, type = 'class')
 sink()
 
 ##
 ## tuned tree
 ##
-## @minsplit, john jay only has 5 articles
+## @maxdepth, john jay has 5 articles, indicated by the default tree
+##     on the second level. Using one level elminates the 'john jay'
+##     leaf-node branch.
 ##
 fit.tuned = rpart(
   author ~ .,
   data = train,
-  control = list(minsplit = 5)
+  method = 'class',
+  control = list(maxdepth = 1)
 )
 
 ## visualize default tree
@@ -117,7 +116,12 @@ cat('===========================================================\n')
 xpred.rpart(fit.tuned, xval=10)
 cat('\n\n')
 cat('===========================================================\n')
-cat(' test prediction \n')
+cat(' test prediction (probability) \n')
 cat('===========================================================\n')
 predict(fit.tuned, test, type = 'prob')
+cat('\n\n')
+cat('===========================================================\n')
+cat(' test prediction (class) \n')
+cat('===========================================================\n')
+predict(fit.tuned, test, type = 'class')
 sink()
