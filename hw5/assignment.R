@@ -21,16 +21,16 @@ load_package(c('caret', 'rpart', 'rpart.plot'))
 ## import dataset
 df = read.csv('data/fedPapers/fedPapers85.csv')
 
-## preprocess data: remove author + filename columns
+## preprocess data: filename columns
 df = df[, -c(2)]
 
 ## training keys
-train_keys = which(df$author != 'dispt')
-test_keys = which(df$author == 'dispt')
+fulltrain = which(df$author != 'dispt')
+disputed = which(df$author == 'dispt')
 
 ## train + test set
-train = df[train_keys, ]
-test = df[test_keys, ]
+train = fulltrain[1:floor(length(fulltrain)*2/3)]
+test = fulltrain[floor(length(fulltrain)*2/3): length(fulltrain)]
 
 ##
 ## default tree
@@ -60,18 +60,29 @@ cat('===========================================================\n')
 cat(' resubstitution error rate, computed on training sample\n')
 cat(' predictive performance. \n')
 cat('===========================================================\n')
-fit.default.pred = table(predict(fit.default, type='class'), train$author)
-1-sum(diag(fit.default.pred))/sum(fit.default.pred)
+fit.default.train = table(predict(fit.default, type='class'), train$author)
+fit.default.train
+cat('\nrestribution error:\n')
+1-sum(diag(fit.default.train))/sum(fit.default.train)
+cat('\n\n')
+cat('===========================================================\n')
+cat(' resubstitution error rate, computed on test sample\n')
+cat(' predictive performance. \n')
+cat('===========================================================\n')
+fit.default.test = table(predict(fit.default, type='class'), test$author)
+fit.default.test
+cat('\nrestribution error:\n')
+1-sum(diag(fit.default.test))/sum(fit.default.test)
 cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (probability) \n')
 cat('===========================================================\n')
-predict(fit.default, test, type = 'prob')
+predict(fit.default, disputed, type = 'prob')
 cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
-predict(fit.default, test, type = 'class')
+predict(fit.default, disputed, type = 'class')
 sink()
 
 ##
@@ -107,8 +118,19 @@ cat('===========================================================\n')
 cat(' resubstitution error rate, computed on training sample\n')
 cat(' predictive performance. \n')
 cat('===========================================================\n')
-fit.tuned.pred = table(predict(fit.tuned, type='class'), train$author)
-1-sum(diag(fit.tuned.pred))/sum(fit.tuned.pred)
+fit.tuned.train = table(predict(fit.tuned, type='class'), train$author)
+fit.tuned.train
+cat('\nrestribution error:\n')
+1-sum(diag(fit.tuned.train))/sum(fit.tuned.train)
+cat('\n\n')
+cat('===========================================================\n')
+cat(' resubstitution error rate, computed on test sample\n')
+cat(' predictive performance. \n')
+cat('===========================================================\n')
+fit.tuned.test = table(predict(fit.tuned, type='class'), test$author)
+fit.tuned.test
+cat('\nrestribution error:\n')
+1-sum(diag(fit.tuned.test))/sum(fit.tuned.test)
 cat('\n\n')
 cat('===========================================================\n')
 cat(' cross validation performance \n')
@@ -118,10 +140,10 @@ cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (probability) \n')
 cat('===========================================================\n')
-predict(fit.tuned, test, type = 'prob')
+predict(fit.tuned, disputed, type = 'prob')
 cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
-predict(fit.tuned, test, type = 'class')
+predict(fit.tuned, disputed, type = 'class')
 sink()
