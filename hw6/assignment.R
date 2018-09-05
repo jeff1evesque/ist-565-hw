@@ -32,7 +32,7 @@ fit.tree = rpart(
 )
 
 ## visualize default tree
-png('hw6/visualization/default_tree.png')
+png('hw6/visualization/default_tree.png', width=10, height=5, units='in', res=1400)
 rpart.plot(fit.tree)
 dev.off()
 
