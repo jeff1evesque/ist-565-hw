@@ -16,7 +16,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('rpart', 'rpart.plot'))
+load_package(c('rpart', 'rpart.plot', 'e1071'))
 
 ## import dataset
 df.train = read.csv('data/digit--train.csv')
@@ -37,7 +37,7 @@ rpart.plot(fit.tree)
 dev.off()
 
 ## decision tree summary
-sink('hw6/visualization/default_tree_analysis.txt')
+sink('hw6/visualization/tree_analysis.txt')
 cat('===========================================================\n')
 cat(' Note: the "root node error" is the error rate for a single\n')
 cat(' node tree, if the tree was pruned to node 1. It is useful\n')
@@ -67,4 +67,27 @@ cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
 predict(fit.tree, df.test, type = 'class')
+sink()
+
+##
+## naive bayes
+##
+fit.nb = naiveBayes(
+    label ~ .,
+    data=df.train,
+    laplace = laplace
+)
+
+## decision tree summary
+sink('hw6/visualization/nb_analysis.txt')
+cat('===========================================================\n')
+cat(' resubstitution error rate, computed on training sample\n')
+cat(' predictive performance. \n')
+cat('===========================================================\n')
+fit.nb.pred = table(predict(fit.nb, type='class'), df.train$label)
+1-sum(diag(fit.nb.pred))/sum(fit.nb.pred)
+cat('===========================================================\n')
+cat(' test prediction (class) \n')
+cat('===========================================================\n')
+predict(fit.nb, df.test, type='class')
 sink()
