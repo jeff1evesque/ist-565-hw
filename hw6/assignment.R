@@ -22,6 +22,9 @@ load_package(c('rpart', 'rpart.plot', 'naivebayes'))
 df.train = read.csv('data/digit--train.csv')
 df.test = read.csv('data/digit--test.csv')
 
+## max print
+max_print = getOption('max.print')
+
 ##
 ## decision tree
 ##
@@ -71,15 +74,17 @@ cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (probability) \n')
 cat('===========================================================\n')
-print(fit.tree.prob, n=length(fit.tree.prob))
+options(max.print = length(fit.tree.prob))
+fit.tree.prob
 cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
-print(fit.tree.class, n=length(fit.tree.class))
+options(max.print = length(fit.tree.class))
+fit.tree.class
 cat('\n\n')
 cat('===========================================================\n')
-cat(' performance \n')
+cat(' performance (minutes) \n')
 paste('fitting tree: ', tree.end - tree.start)
 paste('predicting probability: ', tree.prob.end - tree.prob.start)
 paste('predicting class: ', tree.class.end - tree.class.start)
@@ -117,14 +122,20 @@ cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (probability) \n')
 cat('===========================================================\n')
-print(fit.tree.prob, n=length(fit.tree.prob))
+options(max.print = length(fit.tree.prob))
+fit.tree.prob
 cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (class) \n')
+cat('===========================================================\n')
+options(max.print = length(fit.nb.class))
 print(fit.nb.class, n=length(fit.nb.class))
 cat('===========================================================\n')
-cat(' performance \n')
+cat(' performance (minutes)\n')
 paste('fitting tree: ', tree.end - tree.start)
 paste('predicting probability: ', tree.prob.end - tree.prob.start)
 paste('predicting class: ', tree.class.end - tree.class.start)
 sink()
+
+## reset max.print
+options(max.print = max_print)
