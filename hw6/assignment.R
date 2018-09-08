@@ -16,7 +16,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('rpart', 'rpart.plot'))
+load_package(c('rpart', 'rpart.plot', 'naivebayes'))
 
 ## import dataset
 df.train = read.csv('data/digit--train.csv')
@@ -31,13 +31,16 @@ fit.tree = rpart(
   method = 'class'
 )
 
+fit.tree.prob = predict(fit.tree, df.test, type = 'prob')
+fit.tree.class = predict(fit.tree, df.test, type = 'class')
+
 ## visualize default tree
 png('hw6/visualization/default_tree.png', width=10, height=5, units='in', res=1400)
 rpart.plot(fit.tree)
 dev.off()
 
 ## decision tree summary
-sink('hw6/visualization/default_tree_analysis.txt')
+sink('hw6/visualization/tree_analysis.txt')
 cat('===========================================================\n')
 cat(' Note: the "root node error" is the error rate for a single\n')
 cat(' node tree, if the tree was pruned to node 1. It is useful\n')
@@ -50,8 +53,8 @@ cat('===========================================================\n')
 cat(' resubstitution error rate, computed on training sample\n')
 cat(' predictive performance. \n')
 cat('===========================================================\n')
-fit.tree.pred = table(predict(fit.tree, type='class'), df.train$label)
-1-sum(diag(fit.tree.pred))/sum(fit.tree.pred)
+fit.tree.table = table(predict(fit.tree, type='class'), df.train$label)
+1-sum(diag(fit.tree.table))/sum(fit.tree.table)
 cat('\n\n')
 cat('===========================================================\n')
 cat(' cross validation performance \n')
@@ -61,10 +64,36 @@ cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (probability) \n')
 cat('===========================================================\n')
-predict(fit.tree, df.test, type = 'prob')
+fit.tree.prob
 cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
-predict(fit.tree, df.test, type = 'class')
+fit.tree.class
+sink()
+
+##
+## naive bayes
+##
+fit.nb = naive_bayes(
+    as.factor(label) ~ .,
+    data=df.train,
+    laplace = 1
+)
+
+fit.nb.class = predict(fit.nb, df.test, type='class')
+
+## naive bayes summary
+sink('hw6/visualization/nb_analysis.txt')
+cat('===========================================================\n')
+cat(' resubstitution error rate, computed on training sample\n')
+cat(' predictive performance. \n')
+cat('===========================================================\n')
+fit.nb.table = table(predict(fit.nb, type='class'), df.train$label)
+1-sum(diag(fit.nb.table))/sum(fit.nb.table)
+cat('\n\n')
+cat('===========================================================\n')
+cat(' test prediction (class) \n')
+cat('===========================================================\n')
+fit.nb.class
 sink()
