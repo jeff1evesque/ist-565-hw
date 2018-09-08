@@ -22,17 +22,27 @@ load_package(c('rpart', 'rpart.plot', 'naivebayes'))
 df.train = read.csv('data/digit--train.csv')
 df.test = read.csv('data/digit--test.csv')
 
+## max print
+max_print = getOption('max.print')
+
 ##
 ## decision tree
 ##
+tree.start <- Sys.time()
 fit.tree = rpart(
   label ~ .,
   data = df.train,
   method = 'class'
 )
+tree.end <- Sys.time()
 
-fit.tree.prob = predict(fit.tree, df.test, type = 'prob')
+tree.class.start <- Sys.time()
 fit.tree.class = predict(fit.tree, df.test, type = 'class')
+tree.class.end <- Sys.time()
+
+tree.prob.start <- Sys.time()
+fit.tree.prob = predict(fit.tree, df.test, type = 'prob')
+tree.prob.end <- Sys.time()
 
 ## visualize default tree
 png('hw6/visualization/default_tree.png', width=10, height=5, units='in', res=1400)
@@ -64,24 +74,41 @@ cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (probability) \n')
 cat('===========================================================\n')
+options(max.print = length(fit.tree.prob))
 fit.tree.prob
 cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
+options(max.print = length(fit.tree.class))
 fit.tree.class
+cat('\n\n')
+cat('===========================================================\n')
+cat(' performance (minutes) \n')
+paste('fitting tree: ', tree.end - tree.start)
+paste('predicting probability: ', tree.prob.end - tree.prob.start)
+paste('predicting class: ', tree.class.end - tree.class.start)
+cat('===========================================================\n')
 sink()
 
 ##
 ## naive bayes
 ##
+nb.start <- Sys.time()
 fit.nb = naive_bayes(
     as.factor(label) ~ .,
     data=df.train,
     laplace = 1
 )
+nb.end <- Sys.time()
 
+nb.class.start <- Sys.time()
 fit.nb.class = predict(fit.nb, df.test, type='class')
+nb.class.end <- Sys.time()
+
+nb.prob.start <- Sys.time()
+fit.nb.prob = predict(fit.nb, df.test, type='prob')
+nb.prob.end <- Sys.time()
 
 ## naive bayes summary
 sink('hw6/visualization/nb_analysis.txt')
@@ -93,7 +120,22 @@ fit.nb.table = table(predict(fit.nb, type='class'), df.train$label)
 1-sum(diag(fit.nb.table))/sum(fit.nb.table)
 cat('\n\n')
 cat('===========================================================\n')
+cat(' test prediction (probability) \n')
+cat('===========================================================\n')
+options(max.print = length(fit.tree.prob))
+fit.tree.prob
+cat('\n\n')
+cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
-fit.nb.class
+options(max.print = length(fit.nb.class))
+print(fit.nb.class, n=length(fit.nb.class))
+cat('===========================================================\n')
+cat(' performance (minutes)\n')
+paste('fitting tree: ', tree.end - tree.start)
+paste('predicting probability: ', tree.prob.end - tree.prob.start)
+paste('predicting class: ', tree.class.end - tree.class.start)
 sink()
+
+## reset max.print
+options(max.print = max_print)
