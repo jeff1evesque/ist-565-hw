@@ -22,7 +22,7 @@ load_package(c('rpart', 'rpart.plot', 'naivebayes'))
 df.train = read.csv('data/digit--train.csv')
 df.test = read.csv('data/digit--test.csv')
 
-## remove redudandat pixels
+## remove redundant pixels
 delete = c(
     'pixel0',
     'pixel1',
@@ -153,7 +153,7 @@ cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
 options(max.print = length(fit.nb.class))
-print(fit.nb.class, n=length(fit.nb.class))
+fit.nb.class
 cat('===========================================================\n')
 cat(' performance (minutes)\n')
 cat('===========================================================\n')
