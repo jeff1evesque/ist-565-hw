@@ -22,6 +22,28 @@ load_package(c('rpart', 'rpart.plot', 'naivebayes'))
 df.train = read.csv('data/digit--train.csv')
 df.test = read.csv('data/digit--test.csv')
 
+## remove redudandat pixels
+delete = c(
+    'pixel0',
+    'pixel1',
+    'pixel2',
+    'pixel3',
+    'pixel4',
+    'pixel5',
+    'pixel6',
+    'pixel7',
+    'pixel8',
+    'pixel9',
+    'pixel10',
+    'pixel11',
+    'pixel780',
+    'pixel781',
+    'pixel782',
+    'pixel783'
+)
+df.train = df.train[, !(names(df.train) %in% delete)]
+df.test = df.test[, !(names(df.test) %in% delete)]
+
 ##
 ## decision tree
 ##
