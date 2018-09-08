@@ -16,7 +16,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('rpart', 'rpart.plot', 'e1071'))
+load_package(c('rpart', 'rpart.plot', 'e1071', 'naivebayes'))
 
 ## import dataset
 df.train = read.csv('data/digit--train.csv')
@@ -78,7 +78,7 @@ fit.nb = naiveBayes(
     laplace = laplace
 )
 
-## decision tree summary
+## naive bayes summary
 sink('hw6/visualization/nb_analysis.txt')
 cat('===========================================================\n')
 cat(' resubstitution error rate, computed on training sample\n')
@@ -86,6 +86,11 @@ cat(' predictive performance. \n')
 cat('===========================================================\n')
 fit.nb.pred = table(predict(fit.nb, type='class'), df.train$label)
 1-sum(diag(fit.nb.pred))/sum(fit.nb.pred)
+cat('===========================================================\n')
+cat(' test prediction (probability) \n')
+cat('===========================================================\n')
+predict(fit.tree, df.test, type = 'prob')
+cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
