@@ -135,9 +135,9 @@ print(fit.nb.class, n=length(fit.nb.class))
 cat('===========================================================\n')
 cat(' performance (minutes)\n')
 cat('===========================================================\n')
-paste('fitting tree: ', tree.end - tree.start)
-paste('predicting probability: ', tree.prob.end - tree.prob.start)
-paste('predicting class: ', tree.class.end - tree.class.start)
+paste('fitting tree: ', nb.end - nb.start)
+paste('predicting probability: ', nb.prob.end - nb.prob.start)
+paste('predicting class: ', nb.class.end - nb.class.start)
 sink()
 
 ## reset max.print
