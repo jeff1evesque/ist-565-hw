@@ -50,6 +50,7 @@ df.test = df.test[, !(names(df.test) %in% delete)]
 
 ## max print
 max_print = getOption('max.print')
+options(max.print = nrow(df.train))
 
 ##
 ## multiclass svm: using 3 cross validation
@@ -58,7 +59,8 @@ svm.start = Sys.time()
 fit.svm = svm(
   label~.,
   data=df.train,
-  kernel='linear',
+  kernel='radial',
+  scale=FALSE,
   cost=1,
   cross=3
 )
@@ -66,11 +68,11 @@ svm.end = Sys.time()
 
 ## generate prediction
 svm.pred.start = Sys.time()
-fit.svm.class = predict(fit.svm, df.test, decision.values = TRUE)
+fit.svm.class = predict(fit.svm, df.train[-1], type='class')
 svm.pred.end = Sys.time()
 
 ## confusion matrix
-svm.table = table(fit.svm.class, df.test)
+svm.table = table(fit.svm.class, df.train$label)
 svm.error = 1-sum(diag(svm.table)) / sum(svm.table)
 
 ##
@@ -88,12 +90,12 @@ cat('===========================================================\n')
 fit.svm.class
 cat('\n\n')
 cat('===========================================================\n')
-cat('confusion matrix:')
+cat('confusion matrix:\n')
 cat('===========================================================\n')
 svm.table
 cat('\n\n')
 cat('===========================================================\n')
-cat('resubstitution error:')
+cat('resubstitution error:\n')
 cat('===========================================================\n')
 svm.error
 sink()
