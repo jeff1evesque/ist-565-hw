@@ -19,8 +19,12 @@ library('loadPackage')
 load_package(c('e1071'))
 
 ## import dataset
-df.train = read.csv('data/digit--train.csv')
-df.test = read.csv('data/digit--test.csv')
+df.train.full = read.csv('data/digit--train.csv')
+df.test.full = read.csv('data/digit--test.csv')
+
+## smaller dataset: reduce computation
+df.train = random_sample(df.train.full, (nrow(df.train.full) * 0.1))
+df.test = random_sample(df.test.full, (nrow(df.test.full) * 0.1))
 
 ## remove redundant pixels
 delete = c(
