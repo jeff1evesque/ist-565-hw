@@ -46,6 +46,7 @@ df.test = df.test[, !(names(df.test) %in% delete)]
 
 ## max print
 max_print = getOption('max.print')
+options(max.print = nrow(df.train))
 
 ##
 ## decision tree
@@ -91,19 +92,16 @@ cat('\n\n')
 cat('===========================================================\n')
 cat(' cross validation performance \n')
 cat('===========================================================\n')
-options(max.print = nrow(df.train))
 xpred.rpart(fit.tree, xval=3)
 cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (probability) \n')
 cat('===========================================================\n')
-options(max.print = length(fit.tree.prob))
 fit.tree.prob
 cat('\n\n')
 cat('===========================================================\n')
 cat(' test prediction (class) \n')
 cat('===========================================================\n')
-options(max.print = length(fit.tree.class))
 fit.tree.class
 cat('\n\n')
 cat('===========================================================\n')
