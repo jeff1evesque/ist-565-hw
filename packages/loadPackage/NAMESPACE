@@ -1,1 +1,2 @@
 export(load_package)
+export(random_sample)
