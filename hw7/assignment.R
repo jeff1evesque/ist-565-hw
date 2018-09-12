@@ -164,6 +164,13 @@ predict(fit.rf, df.test.full)
 sink()
 
 ##
+## plot random forest: error rate per number (0-9)
+##
+png('hw7/visualization/random_forest.png', width=10, height=5, units='in', res=1400)
+plot(fit.rf, main='Error vs Trees')
+dev.off()
+
+##
 ## model performance
 ##
 sink('hw7/visualization/model_performance.txt')
