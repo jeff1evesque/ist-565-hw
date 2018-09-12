@@ -16,7 +16,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('e1071'))
+load_package(c('e1071', 'class'))
 
 ## import dataset
 df.train.full = read.csv('data/digit--train.csv')
@@ -51,6 +51,42 @@ df.test = df.test[, !(names(df.test) %in% delete)]
 ## max print
 max_print = getOption('max.print')
 options(max.print = nrow(df.train))
+
+##
+## knn: using a guess for number of neighbors (i.e. k)
+##
+knn.start = Sys.time()
+fit.knn = knn(
+  train=df.train[-1],
+  test=df.test,
+  cl=df.train$label,
+  k=1,
+  prob=F
+)
+knn.end = Sys.time()
+
+## confusion matrix
+knn.error = 'NA'
+
+##
+## knn report
+##
+sink('hw7/visualization/knn_analysis.txt')
+cat('===========================================================\n')
+cat('knn model: \n')
+cat('===========================================================\n')
+fit.knn
+cat('\n\n')
+cat('===========================================================\n')
+cat('confusion matrix:\n')
+cat('===========================================================\n')
+cat('N/A')
+cat('\n\n')
+cat('===========================================================\n')
+cat('resubstitution error:\n')
+cat('===========================================================\n')
+cat('N/A')
+sink()
 
 ##
 ## multiclass svm: using 3 cross validation
@@ -109,6 +145,7 @@ cat(' performance (minutes) \n')
 cat('===========================================================\n')
 paste('fitting svm: ', svm.end - svm.start)
 paste('predicting svm: ', svm.pred.end - svm.pred.start)
+paste('knn model + prediction: ', knn.end - knn.start)
 sink()
 
 ## reset max.print
