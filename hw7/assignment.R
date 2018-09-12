@@ -16,7 +16,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('e1071', 'class'))
+load_package(c('e1071', 'class', 'randomForest'))
 
 ## import dataset
 df.train.full = read.csv('data/digit--train.csv')
@@ -137,6 +137,40 @@ svm.error
 sink()
 
 ##
+## random forest: instead of using 'method=class' like rpart, 'as.factor'
+##     is implemented directly on the formula.
+##
+rf.start = Sys.time()
+fit.rf = randomForest(
+  as.factor(label) ~ .,
+  data = df.train.full,
+  ntree = 30
+)
+rf.end = Sys.time()
+
+##
+## random forest report
+##
+sink('hw7/visualization/rf_analysis.txt')
+cat('===========================================================\n')
+cat('random forest model: 30 trees\n')
+cat('===========================================================\n')
+fit.rf
+cat('\n\n')
+cat('===========================================================\n')
+cat('prediction: \n')
+cat('===========================================================\n')
+predict(fit.rf, df.test.full)
+sink()
+
+##
+## plot random forest: error rate per number (0-9)
+##
+png('hw7/visualization/random_forest.png', width=10, height=5, units='in', res=1400)
+plot(fit.rf, main='Error vs Trees')
+dev.off()
+
+##
 ## model performance
 ##
 sink('hw7/visualization/model_performance.txt')
@@ -146,6 +180,7 @@ cat('===========================================================\n')
 paste('fitting svm: ', svm.end - svm.start)
 paste('predicting svm: ', svm.pred.end - svm.pred.start)
 paste('knn model + prediction: ', knn.end - knn.start)
+paste('random forest model + prediction: ', rf.end - rf.start)
 sink()
 
 ## reset max.print
