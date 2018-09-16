@@ -19,8 +19,16 @@ library('loadPackage')
 load_package(c('stringi'))
 
 ## import dataset
-df.colnames = read.table('data/deception_data_converted_final.csv', nrow=1, stringsAsFactors=FALSE, sep=',')
-df.full = read.table('data/deception_data_converted_final.csv', skip=1,header=FALSE, sep='\n')
+filepath = 'data/deception_data_converted_final.csv'
+df.colnames = read.table(filepath, nrow=1, stringsAsFactors=FALSE, sep=',')
+df.full = read.table(
+  filepath,
+  skip=1,
+  header=FALSE,
+  sep='\n',
+  quote = '',
+  comment.char = ''
+)
 
 ##
 ## separate columns: match first two instances of commas, and split
