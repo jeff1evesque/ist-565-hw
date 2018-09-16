@@ -39,3 +39,15 @@ df.split = as.data.frame(do.call(rbind, out))
 
 ## assign column name
 colnames(df.split) = df.colnames
+
+##
+## create train + test
+##
+## Note: seed defined to ensure reproducible sample
+##
+set.seed(123)
+sample_size = floor(2/3 * nrow(df.split))
+train = sample(seq_len(nrow(df.split)), size = sample_size)
+df.train = df.split[train, ]
+df.test = df.split[-train, ]
+
