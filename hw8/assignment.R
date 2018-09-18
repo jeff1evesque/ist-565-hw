@@ -70,10 +70,7 @@ sink()
 ## dtm_tfidf summary
 sink('hw8/visualization/dtm_tfidf.txt')
 as.data.frame(as.matrix(dtm))
-sink()
-
-## merge dtm_tfidf
-df.split = merge(df.split, as.data.frame(as.matrix(dtm)))
+sink()=
 
 ##
 ## create train + test
