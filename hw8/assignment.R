@@ -85,3 +85,14 @@ df.test = df.split[-train, ]
 
 ## reset max.print
 options(max.print = max_print)
+
+##
+## multinomial naive bayes
+##
+nb.fit.start = Sys.time()
+fit.nb = naive_bayes(
+  as.factor(lie) ~ .,
+  data=df.train,
+  laplace = 1
+)
+nb.fit.end = Sys.time()
