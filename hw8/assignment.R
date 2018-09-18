@@ -86,13 +86,24 @@ df.test = df.split[-train, ]
 ##
 ## naive bayes: sentiment
 ##
-nb.fit.start = Sys.time()
-fit.nb = naive_bayes(
+nb.fit.sentiment.start = Sys.time()
+fit.nb.sentiment = naive_bayes(
   as.factor(sentiment) ~ .,
   data=subset(df.train, select=c(-lie)),
   laplace = 1
 )
-nb.fit.end = Sys.time()
+nb.fit.sentiment.end = Sys.time()
+
+##
+## naive bayes: lie detection
+##
+nb.fit.lie.start = Sys.time()
+fit.nb.lie = naive_bayes(
+  as.factor(lie) ~ .,
+  data=subset(df.train, select=c(-sentiment)),
+  laplace = 1
+)
+nb.fit.lie.end = Sys.time()
 
 ## reset max.print
 options(max.print = max_print)
