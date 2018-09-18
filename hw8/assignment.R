@@ -64,13 +64,19 @@ dtm_tfidf = model_tfidf$fit_transform(dtm)
 
 ## dtm summary
 sink('hw8/visualization/dtm.txt')
-as.data.frame(as.matrix(dtm))
+df.merged = as.data.frame(as.matrix(dtm))
+df.merged
 sink()
 
 ## dtm_tfidf summary
 sink('hw8/visualization/dtm_tfidf.txt')
 as.data.frame(as.matrix(dtm_tfidf))
-sink()=
+sink()
+
+## merge datasets
+df.merged$lie = df.split$lie
+df.merged$sentiment = df.split$sentiment
+df.merged$review = df.split$review
 
 ##
 ## create train + test
@@ -79,9 +85,9 @@ sink()=
 ##
 set.seed(123)
 sample_size = floor(2/3 * nrow(df.split))
-train = sample(seq_len(nrow(df.split)), size = sample_size)
-df.train = df.split[train, ]
-df.test = df.split[-train, ]
+train = sample(seq_len(nrow(df.merged)), size = sample_size)
+df.train = df.merged[train, ]
+df.test = df.merged[-train, ]
 
 ##
 ## naive bayes: sentiment
@@ -104,6 +110,14 @@ fit.nb.lie = naive_bayes(
   laplace = 1
 )
 nb.fit.lie.end = Sys.time()
+
+nb.class.lie.start = Sys.time()
+fit.nb.class = predict(fit.nb.lie, df.test, type='class')
+nb.class.lie.end = Sys.time()
+
+nb.prob.lie.start = Sys.time()
+fit.nb.prob = predict(fit.nb.lie, df.test, type='prob')
+nb.prob.lie.end = Sys.time()
 
 ## reset max.print
 options(max.print = max_print)
