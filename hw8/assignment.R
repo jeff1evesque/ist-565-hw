@@ -84,12 +84,12 @@ df.train = df.split[train, ]
 df.test = df.split[-train, ]
 
 ##
-## multinomial naive bayes
+## naive bayes: sentiment
 ##
 nb.fit.start = Sys.time()
 fit.nb = naive_bayes(
-  as.factor(lie) ~ .,
-  data=df.train,
+  as.factor(sentiment) ~ .,
+  data=subset(df.train, select=c(-lie)),
   laplace = 1
 )
 nb.fit.end = Sys.time()
