@@ -83,9 +83,6 @@ train = sample(seq_len(nrow(df.split)), size = sample_size)
 df.train = df.split[train, ]
 df.test = df.split[-train, ]
 
-## reset max.print
-options(max.print = max_print)
-
 ##
 ## multinomial naive bayes
 ##
@@ -96,3 +93,6 @@ fit.nb = naive_bayes(
   laplace = 1
 )
 nb.fit.end = Sys.time()
+
+## reset max.print
+options(max.print = max_print)
