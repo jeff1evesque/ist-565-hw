@@ -73,6 +73,12 @@ sink('hw8/visualization/dtm_tfidf.txt')
 as.data.frame(as.matrix(dtm_tfidf))
 sink()
 
+##
+## reduce feature set: keep words if colsums > 10. This reduces the
+##     sparse matrix from 1462 features, down to 109.
+##
+df.merged = df.merged[, colSums(df.merged) > 10]
+
 ## merge datasets
 df.merged$lie = df.split$lie
 df.merged$sentiment = df.split$sentiment
