@@ -40,10 +40,10 @@ options(max.print = nrow(df.full) * 1500)
 ##
 out = stri_split_fixed(str = df.full[, c(1)], pattern = ',', n = 3)
 df.split = as.data.frame(do.call(rbind, out))
-df.split$review = as.character(df.split$review)
 
 ## assign column name
 colnames(df.split) = df.colnames
+df.split$review = as.character(df.split$review)
 
 ## create vocabulary
 it_train = itoken(
@@ -71,6 +71,9 @@ sink()
 sink('hw8/visualization/dtm_tfidf.txt')
 as.data.frame(as.matrix(dtm))
 sink()
+
+## merge dtm_tfidf
+df.split = merge(df.split, as.data.frame(as.matrix(dtm)))
 
 ##
 ## create train + test
