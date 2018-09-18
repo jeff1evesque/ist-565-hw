@@ -69,7 +69,7 @@ sink()
 
 ## dtm_tfidf summary
 sink('hw8/visualization/dtm_tfidf.txt')
-as.data.frame(as.matrix(dtm))
+as.data.frame(as.matrix(dtm_tfidf))
 sink()=
 
 ##
