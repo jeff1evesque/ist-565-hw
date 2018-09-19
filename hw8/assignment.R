@@ -128,7 +128,7 @@ nb.fit.sentiment.end = Sys.time()
 
 nb.class.sentiment.start = Sys.time()
 fit.nb.class = predict(fit.nb.sentiment, subset(df.test, select = -c(lie)), type='class')
-nb.class.lie.end = Sys.time()
+nb.class.sentiment.end = Sys.time()
 
 nb.prob.sentiment.start = Sys.time()
 fit.nb.prob = predict(fit.nb.sentiment, subset(df.test, select = -c(lie)), type='prob')
@@ -163,9 +163,9 @@ svm.sentiment.model = svm(
   data=subset(df.train, select=-c(lie)),
   probability = TRUE
 )
-svm.sentiment.end = Sys.time()
+svm.fit.sentiment.end = Sys.time()
 
-svm.sentiment.lie.start = Sys.time()
+svm.sentiment.start = Sys.time()
 svm.sentiment.pred = predict(
   svm.sentiment.model,
   subset(df.test, select = -c(lie)),
@@ -173,6 +173,28 @@ svm.sentiment.pred = predict(
   probability = TRUE
 )
 svm.sentiment.end = Sys.time()
+
+##
+## model performance
+##
+sink('hw8/visualization/model_performance.txt')
+cat('===========================================================\n')
+cat(' performance (minutes) \n')
+cat('===========================================================\n')
+paste('fitting naive bayes (lie detection): ', nb.fit.lie.end - nb.fit.lie.start)
+paste('fitting naive bayes (sentiment): ', nb.fit.sentiment.end - nb.fit.sentiment.start)
+paste('fitting svm (lie detection): ', svm.fit.lie.end - svm.fit.lie.start)
+paste('fitting svm (sentiment): ', svm.fit.sentiment.end - svm.fit.sentiment.start)
+cat('\n')
+paste('predicting naive bayes, class (lie detection): ', nb.class.lie.end - nb.class.lie.start)
+paste('predicting naive bayes, prob (lie detection): ', nb.prob.lie.end - nb.prob.lie.start)
+cat('\n')
+paste('predicting naive bayes, class (sentiment): ', nb.class.sentiment.end - nb.class.sentiment.start)
+paste('predicting naive bayes, prob (sentiment): ', nb.prob.sentiment.end - nb.prob.sentiment.start)
+cat('\n')
+paste('predicting svm, (lie detection): ', svm.lie.end - svm.lie.start)
+paste('predicting svm, (sentiment): ', svm.sentiment.end - svm.sentiment.start)
+sink()
 
 ## reset max.print
 options(max.print = max_print)
