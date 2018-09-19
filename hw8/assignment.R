@@ -16,7 +16,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('stringi', 'naivebayes', 'text2vec'))
+load_package(c('stringi', 'naivebayes', 'text2vec', 'FSelector'))
 
 ## import dataset
 filepath = 'data/deception_data_converted_final.csv'
@@ -266,6 +266,54 @@ cat('===========================================================\n')
 fit.svm.table = table(svm.sentiment.pred, df.test$sentiment)
 paste('class error:', 1-sum(diag(fit.svm.table))/sum(fit.svm.table))
 fit.svm.table
+sink()
+
+##
+## gain ratio + chi2
+##
+gain.sentiment = gain.ratio(
+  sentiment ~ .,
+  data=subset(df.train, select=-c(lie))
+)
+gain.sentiment20 = cutoff.k(gain.sentiment, 20)
+
+gain.lie = gain.ratio(
+  lie ~ .,
+  data=subset(df.train, select=-c(sentiment))
+)
+gain.lie20 = cutoff.k(gain.lie, 20)
+
+chi2.sentiment = chi.squared(
+  sentiment ~ .,
+  data=subset(df.train, select=-c(lie))
+)
+chi2.sentiment20 = cutoff.k(chi2.sentiment, 20)
+
+chi2.lie = chi.squared(
+  lie ~ .,
+  data=subset(df.train, select=-c(sentiment))
+)
+chi2.lie20 = cutoff.k(chi2.lie, 20)
+
+##
+## report: gainratio + chi2
+##
+sink('hw8/visualization/gainratio_chi2.txt')
+cat('===========================================================\n')
+cat('gain ratio:\n')
+cat('===========================================================\n')
+paste('sentiment: ', gain.sentiment)
+paste('lie: ', gain.lie)
+paste('sentiment (top 20): ', gain.sentiment20)
+paste('lie (top 20): ', gain.lie20)
+cat('\n\n')
+cat('===========================================================\n')
+cat('chi squared: \n')
+cat('===========================================================\n')
+paste('sentiment: ', chi2.sentiment)
+paste('lie: ', chi2.lie)
+paste('sentiment (top 20): ', chi2.sentiment20)
+paste('lie (top 20): ', chi2.lie20)
 sink()
 
 ##
