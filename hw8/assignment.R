@@ -146,7 +146,7 @@ svm.lie.model = svm(
 svm.fit.lie.end = Sys.time()
 
 svm.prob.lie.start = Sys.time()
-pred_prob = predict(
+svm.lie.pred = predict(
     svm.lie.model,
     subset(df.test, select = -c(sentiment)),
     decision.values = TRUE,
@@ -166,7 +166,7 @@ svm.sentiment.model = svm(
 svm.sentiment.end = Sys.time()
 
 svm.sentiment.lie.start = Sys.time()
-pred_prob = predict(
+svm.sentiment.pred = predict(
   svm.sentiment.model,
   subset(df.test, select = -c(lie)),
   decision.values = TRUE,
