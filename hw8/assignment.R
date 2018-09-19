@@ -134,5 +134,45 @@ nb.prob.sentiment.start = Sys.time()
 fit.nb.prob = predict(fit.nb.sentiment, subset(df.test, select = -c(lie)), type='prob')
 nb.prob.sentiment.end = Sys.time()
 
+##
+## svm: lie detection
+##
+svm.fit.lie.start = Sys.time()
+svm.lie.model = svm(
+    as.factor(lie) ~ .,
+    data=subset(df.train, select=-c(sentiment)),
+    probability = TRUE
+)
+svm.fit.lie.end = Sys.time()
+
+svm.prob.lie.start = Sys.time()
+pred_prob = predict(
+    svm.lie.model,
+    subset(df.test, select = -c(sentiment)),
+    decision.values = TRUE,
+    probability = TRUE
+)
+svm.prob.lie.end = Sys.time()
+
+##
+## svm: sentiment
+##
+svm.fit.sentiment.start = Sys.time()
+svm.sentiment.model = svm(
+  as.factor(sentiment) ~ .,
+  data=subset(df.train, select=-c(lie)),
+  probability = TRUE
+)
+svm.sentiment.end = Sys.time()
+
+svm.sentiment.lie.start = Sys.time()
+pred_prob = predict(
+  svm.sentiment.model,
+  subset(df.test, select = -c(lie)),
+  decision.values = TRUE,
+  probability = TRUE
+)
+svm.sentiment.end = Sys.time()
+
 ## reset max.print
 options(max.print = max_print)
