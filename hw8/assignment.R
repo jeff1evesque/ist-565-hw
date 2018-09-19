@@ -97,17 +97,6 @@ df.train = df.merged[train, ]
 df.test = df.merged[-train, ]
 
 ##
-## naive bayes: sentiment
-##
-nb.fit.sentiment.start = Sys.time()
-fit.nb.sentiment = naive_bayes(
-  as.factor(sentiment) ~ .,
-  data=subset(df.train, select=-c(lie)),
-  laplace = 1
-)
-nb.fit.sentiment.end = Sys.time()
-
-##
 ## naive bayes: lie detection
 ##
 nb.fit.lie.start = Sys.time()
@@ -144,6 +133,46 @@ nb.class.lie.end = Sys.time()
 nb.prob.sentiment.start = Sys.time()
 fit.nb.prob = predict(fit.nb.sentiment, subset(df.test, select = -c(lie)), type='prob')
 nb.prob.sentiment.end = Sys.time()
+
+##
+## svm: lie detection
+##
+svm.fit.lie.start = Sys.time()
+svm.lie.model = svm(
+    as.factor(lie) ~ .,
+    data=subset(df.train, select=-c(sentiment)),
+    probability = TRUE
+)
+svm.fit.lie.end = Sys.time()
+
+svm.prob.lie.start = Sys.time()
+svm.lie.pred = predict(
+    svm.lie.model,
+    subset(df.test, select = -c(sentiment)),
+    decision.values = TRUE,
+    probability = TRUE
+)
+svm.prob.lie.end = Sys.time()
+
+##
+## svm: sentiment
+##
+svm.fit.sentiment.start = Sys.time()
+svm.sentiment.model = svm(
+  as.factor(sentiment) ~ .,
+  data=subset(df.train, select=-c(lie)),
+  probability = TRUE
+)
+svm.sentiment.end = Sys.time()
+
+svm.sentiment.lie.start = Sys.time()
+svm.sentiment.pred = predict(
+  svm.sentiment.model,
+  subset(df.test, select = -c(lie)),
+  decision.values = TRUE,
+  probability = TRUE
+)
+svm.sentiment.end = Sys.time()
 
 ## reset max.print
 options(max.print = max_print)
