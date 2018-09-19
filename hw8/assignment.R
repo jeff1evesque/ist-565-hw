@@ -97,17 +97,6 @@ df.train = df.merged[train, ]
 df.test = df.merged[-train, ]
 
 ##
-## naive bayes: sentiment
-##
-nb.fit.sentiment.start = Sys.time()
-fit.nb.sentiment = naive_bayes(
-  as.factor(sentiment) ~ .,
-  data=subset(df.train, select=-c(lie)),
-  laplace = 1
-)
-nb.fit.sentiment.end = Sys.time()
-
-##
 ## naive bayes: lie detection
 ##
 nb.fit.lie.start = Sys.time()
