@@ -83,6 +83,7 @@ df.merged = df.merged[, colSums(df.merged) > 0.3]
 df.merged$lie = df.split$lie
 df.merged$sentiment = df.split$sentiment
 df.merged$review = df.split$review
+df.merged = subset(df.merged, select = -c(review))
 
 ##
 ## create train + test
@@ -101,7 +102,7 @@ df.test = df.merged[-train, ]
 nb.fit.sentiment.start = Sys.time()
 fit.nb.sentiment = naive_bayes(
   as.factor(sentiment) ~ .,
-  data=subset(df.train, select=-c(lie, review)),
+  data=subset(df.train, select=-c(lie)),
   laplace = 1
 )
 nb.fit.sentiment.end = Sys.time()
@@ -112,7 +113,7 @@ nb.fit.sentiment.end = Sys.time()
 nb.fit.lie.start = Sys.time()
 fit.nb.lie = naive_bayes(
   as.factor(lie) ~ .,
-  data=subset(df.train, select=-c(sentiment, review)),
+  data=subset(df.train, select=-c(sentiment)),
   laplace = 1
 )
 nb.fit.lie.end = Sys.time()
