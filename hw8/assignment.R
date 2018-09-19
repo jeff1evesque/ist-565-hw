@@ -16,7 +16,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('stringi', 'naivebayes', 'text2vec', 'FSelector'))
+load_package(c('stringi', 'naivebayes', 'e1071', 'text2vec', 'FSelector'))
 
 ## import dataset
 filepath = 'data/deception_data_converted_final.csv'
