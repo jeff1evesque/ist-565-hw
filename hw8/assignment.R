@@ -126,5 +126,24 @@ nb.prob.lie.start = Sys.time()
 fit.nb.prob = predict(fit.nb.lie, subset(df.test, select = -c(sentiment)), type='prob')
 nb.prob.lie.end = Sys.time()
 
+##
+## naive bayes: sentiment
+##
+nb.fit.sentiment.start = Sys.time()
+fit.nb.sentiment = naive_bayes(
+  as.factor(sentiment) ~ .,
+  data=subset(df.train, select=-c(lie)),
+  laplace = 1
+)
+nb.fit.sentiment.end = Sys.time()
+
+nb.class.sentiment.start = Sys.time()
+fit.nb.class = predict(fit.nb.sentiment, subset(df.test, select = -c(lie)), type='class')
+nb.class.lie.end = Sys.time()
+
+nb.prob.sentiment.start = Sys.time()
+fit.nb.prob = predict(fit.nb.sentiment, subset(df.test, select = -c(lie)), type='prob')
+nb.prob.sentiment.end = Sys.time()
+
 ## reset max.print
 options(max.print = max_print)
