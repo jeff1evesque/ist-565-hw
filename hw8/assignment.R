@@ -69,8 +69,21 @@ sink()
 
 ## dtm_tfidf summary
 sink('hw8/visualization/dtm_tfidf.txt')
-as.data.frame(as.matrix(dtm))
-sink()=
+df.merged = as.data.frame(as.matrix(dtm_tfidf))
+df.merged
+sink()
+
+##
+## reduce feature set: keep words if colsums > 0.3. This reduces the
+##     sparse matrix from 1462 features, down to 118 (columns).
+##
+df.merged = df.merged[, colSums(df.merged) > 0.3]
+
+## merge datasets
+df.merged$lie = df.split$lie
+df.merged$sentiment = df.split$sentiment
+df.merged$review = df.split$review
+df.merged = subset(df.merged, select = -c(review))
 
 ##
 ## create train + test
@@ -78,10 +91,59 @@ sink()=
 ## Note: seed defined to ensure reproducible sample
 ##
 set.seed(123)
-sample_size = floor(2/3 * nrow(df.split))
-train = sample(seq_len(nrow(df.split)), size = sample_size)
-df.train = df.split[train, ]
-df.test = df.split[-train, ]
+sample_size = floor(2/3 * nrow(df.merged))
+train = sample(seq_len(nrow(df.merged)), size = sample_size)
+df.train = df.merged[train, ]
+df.test = df.merged[-train, ]
+
+##
+## naive bayes: sentiment
+##
+nb.fit.sentiment.start = Sys.time()
+fit.nb.sentiment = naive_bayes(
+  as.factor(sentiment) ~ .,
+  data=subset(df.train, select=-c(lie)),
+  laplace = 1
+)
+nb.fit.sentiment.end = Sys.time()
+
+##
+## naive bayes: lie detection
+##
+nb.fit.lie.start = Sys.time()
+fit.nb.lie = naive_bayes(
+  as.factor(lie) ~ .,
+  data=subset(df.train, select=-c(sentiment)),
+  laplace = 1
+)
+nb.fit.lie.end = Sys.time()
+
+nb.class.lie.start = Sys.time()
+fit.nb.class = predict(fit.nb.lie, subset(df.test, select = -c(sentiment)), type='class')
+nb.class.lie.end = Sys.time()
+
+nb.prob.lie.start = Sys.time()
+fit.nb.prob = predict(fit.nb.lie, subset(df.test, select = -c(sentiment)), type='prob')
+nb.prob.lie.end = Sys.time()
+
+##
+## naive bayes: sentiment
+##
+nb.fit.sentiment.start = Sys.time()
+fit.nb.sentiment = naive_bayes(
+  as.factor(sentiment) ~ .,
+  data=subset(df.train, select=-c(lie)),
+  laplace = 1
+)
+nb.fit.sentiment.end = Sys.time()
+
+nb.class.sentiment.start = Sys.time()
+fit.nb.class = predict(fit.nb.sentiment, subset(df.test, select = -c(lie)), type='class')
+nb.class.lie.end = Sys.time()
+
+nb.prob.sentiment.start = Sys.time()
+fit.nb.prob = predict(fit.nb.sentiment, subset(df.test, select = -c(lie)), type='prob')
+nb.prob.sentiment.end = Sys.time()
 
 ## reset max.print
 options(max.print = max_print)
