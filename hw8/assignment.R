@@ -16,7 +16,7 @@ devtools::install_local(paste(cwd, sep='', '/packages/loadPackage'))
 library('loadPackage')
 
 ## load contrib packages
-load_package(c('stringi', 'naivebayes', 'text2vec', 'FSelector'))
+load_package(c('stringi', 'naivebayes', 'e1071', 'text2vec', 'FSelector'))
 
 ## import dataset
 filepath = 'data/deception_data_converted_final.csv'
@@ -30,10 +30,6 @@ df.full = read.table(
   comment.char = ''
 )
 
-## max print
-max_print = getOption('max.print')
-options(max.print = nrow(df.full) * 1500)
-
 ##
 ## separate columns: match first two instances of commas, and split
 ##     into three different columns.
@@ -44,6 +40,10 @@ df.split = as.data.frame(do.call(rbind, out))
 ## assign column name
 colnames(df.split) = df.colnames
 df.split$review = as.character(df.split$review)
+
+## max print
+max_print = getOption('max.print')
+options(max.print = nrow(df.full) * 1500)
 
 ## create vocabulary
 it_train = itoken(
